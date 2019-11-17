@@ -128,6 +128,8 @@ function place_lists()
 function init()
 {
 	place_lists();
-	extract_forum_data();
-	extract_github_data();
+ 	if (!document.location.search.match(/[?&]nonstaff\b/))
+		extract_forum_data();
+ 	if (!document.location.search.match(/[?&]staff\b/))
+		extract_github_data();
 }
