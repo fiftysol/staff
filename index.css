@@ -1,0 +1,36 @@
+body {
+	background-color: #0C0C0C;
+	margin: 0;
+	margin-bottom: 10px;
+}
+
+.banner {
+	background-color: #000000;
+}
+
+.aligned {
+	padding-left: 20%;
+}
+
+.menu {
+	background-color: #101010;
+    display: flex;
+}
+
+.menu .button {
+	color: #E03FB1;
+	border-left: 1px solid #232323;
+	text-align: center;
+	cursor: pointer;
+	font: bold 16pt Trebuchet MS,Verdana,sans-serif;
+	padding: 15px 25px 15px 25px;
+	width: auto;
+}
+
+.menu .border-right {
+	border-right: 1px solid #232323;
+}
+
+.menu .button:hover {
+	background-color: #232323;
+}
