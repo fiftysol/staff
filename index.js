@@ -9,18 +9,20 @@ if (!String.format) {
 }
 const cors_url = "https://cors-anywhere.herokuapp.com/";
 
-function toggle_visiblity(name)
+function toggle_visibility(name)
 {
 	let classList = document.getElementById(name).classList
-	if (classList.contains("invisible"))
+	if (classList.contains("invisible-hide"))
 	{
-		classList.add("visible");
-		classList.remove("invisible");
+		classList.remove("invisible-animate");
+		classList.remove("invisible-hide");
 	}
 	else
 	{
-		classList.add("invisible");
-		classList.remove("visible");
+		classList.add("invisible-animate");
+		setTimeout(function() {
+			classList.add("invisible-hide");
+		}, 1000);
 	}
 }
 
@@ -34,20 +36,18 @@ let forum_roles = {
 
 function extract_forum_nicknames(body)
 {
-	let match = body.match(/(\S+)(?:<span class="nav-header-hashtag">)(#\d+)/g);
-	for (str in match)
-		match[str] = match[str].replace(/<.+>/, '');
-	return match.sort();
+	return [...body.matchAll(/(\S+)<span class="nav-header-hashtag">#(\d+)/g)].sort();
 }
 
 const forum_url = cors_url + "https://atelier801.com/staff-ajax?role=";
-async function extract_forum_data()
+function extract_forum_data()
 {
-	for (name in forum_roles)
-		await fetch(forum_url + forum_roles[name])
+	for (let name in forum_roles){
+		fetch(forum_url + forum_roles[name])
 			.then(body => body.text())
 			.then(body => extract_forum_nicknames(body))
 			.then(body => generate_html(body, name))
+	}
 }
 
 // GitHub
@@ -60,16 +60,16 @@ let github_roles = {
 function extract_github_nicknames(body, name)
 {
 	let list = body.match(`${name} = {[^}]+}`);
-	return list[0].match(/\w+#\d+/g);
+	return [...list[0].matchAll(/(\w+)#(\d+)/g)];
 }
 
 const github_url = cors_url + "https://github.com/a801-luadev/bolodefchoco/raw/master/module.lua";
-async function extract_github_data()
+function extract_github_data()
 {
-	await fetch(github_url)
+	fetch(github_url)
 		.then(body => body.text())
 		.then(body => {
-			for (name in github_roles)
+			for (let name in github_roles)
 				generate_html(extract_github_nicknames(body, github_roles[name]), name);
 		})
 }
@@ -77,7 +77,7 @@ async function extract_github_data()
 // Build
 const html_init = `
 	<div class=\"list\" class=\"visible\">
-		<h3 onclick="toggle_visiblity('{0}');">{0}</h3>
+		<h3 onclick="toggle_visibility('{0}');"><font type=\"{0}\">{0}</font></h3>
 		<div id=\"{0}\">
 			<table>
 				<tr class=\"head\">
@@ -97,23 +97,37 @@ function generate_html(staff_list, name)
 	let html = String.format(html_init, name);
 	let color_index = 0;
 
-	for (index in staff_list)
+	for (let index in staff_list)
 	{
-		staff_list[index] = [ staff_list[index].slice(0, -5), staff_list[index].slice(-4) ];
 		html += String.format(html_cell,
 			(++color_index % 2 == 0 ? "even" : "odd"),
 			name,
-			staff_list[index][0],
-			staff_list[index][1]
+			staff_list[index][1],
+			staff_list[index][2]
 		);
 	}
 
 	// Effect of "loading" in the site, instead of loading everything at once.
 	html += html_end;
+
+	let tmp = document.getElementById("tmp-" + name);
+	tmp.insertAdjacentHTML("afterend", html);
+	tmp.remove();
+}
+
+// Init
+const html_tmp_div = "<div id=\"tmp-{0}\"></div>"
+function place_lists()
+{
+	let html = '';
+	for (let team of Object.keys(forum_roles).concat(Object.keys(github_roles)))
+		html += String.format(html_tmp_div, team);
 	document.getElementById("lists").innerHTML += html;
 }
 
-(async () => {
-	await extract_forum_data();
-	await extract_github_data();
-})();
+function init()
+{
+	place_lists();
+	extract_forum_data();
+	extract_github_data();
+}
