@@ -9,7 +9,7 @@ if (!String.format) {
 }
 const cors_url = "https://cors-anywhere.herokuapp.com/";
 
-function toggleVisible(name)
+function toggle_visiblity(name)
 {
 	let classList = document.getElementById(name).classList
 	if (classList.contains("invisible"))
@@ -77,7 +77,7 @@ async function extract_github_data()
 // Build
 const html_init = `
 	<div class=\"list\" class=\"visible\">
-		<h3 onclick="toggleVisible('{0}');">{0}</h3>
+		<h3 onclick="toggle_visiblity('{0}');">{0}</h3>
 		<div id=\"{0}\">
 			<table>
 				<tr class=\"head\">
