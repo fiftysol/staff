@@ -92,4 +92,28 @@ const html_end = `
 		</div>
 	</div>`;
 
-function generate_html(body, name) { }
+function generate_html(staff_list, name)
+{
+	let html = String.format(html_init, name);
+	let color_index = 0;
+
+	for (index in staff_list)
+	{
+		staff_list[index] = [ staff_list[index].slice(0, -5), staff_list[index].slice(-4) ];
+		html += String.format(html_cell,
+			(++color_index % 2 == 0 ? "even" : "odd"),
+			name,
+			staff_list[index][0],
+			staff_list[index][1]
+		);
+	}
+
+	// Effect of "loading" in the site, instead of loading everything at once.
+	html += html_end;
+	document.getElementById("lists").innerHTML += html;
+}
+
+(async () => {
+	await extract_forum_data();
+	await extract_github_data();
+})();
