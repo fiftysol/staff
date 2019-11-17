@@ -34,3 +34,106 @@ body {
 .menu .button:hover {
 	background-color: #232323;
 }
+
+.lists {
+	margin: 0 auto;
+	width: 20%;
+}
+
+.list {
+	text-align: center;
+	margin: 10px 0px 20px 50px;
+}
+
+.list h3 {
+	margin: 20px auto;
+	color: #666;
+	display: block;
+	font-size: 17pt;
+	font-family: verdana,arial,tahoma,sans-serif;
+	font-weight: bold;
+	background-color: #101010;
+	padding: 20px;
+	border-radius: 15px;
+}
+
+.list h3:hover {
+	color: #888;
+	cursor: pointer;
+}
+
+.list table {
+	margin: auto;
+	border: 1px solid #232323;
+}
+
+.list table th {
+	background-color: #0C0C0C;
+	color: #0387DB;
+	font-size: 14pt;
+	font-family: arial;
+}
+
+.list table td {
+	color: #999;
+	font-size: 12pt;
+	font-family: arial;
+	padding: 4px;
+}
+
+.list table td:hover {
+	background-color: #3C3C3C;
+}
+
+.list table .even-background {
+	background-color: #232323;
+}
+
+.list table .odd-background {
+	background-color: #191919;
+}
+
+font[type="Administrators"] {
+	color: #EB1D51;
+}
+font[type="Moderators"] {
+	color: #BABD2F;
+}
+font[type="Sentinels"] {
+	color: #2ECF73;
+}
+font[type="Mapcrew"] {
+	color: #2F7FCC;
+}
+font[type="Module Team"] {
+	color: #7AC9C4;
+}
+font[type="Funcorp"] {
+	color: #FF9C00;
+}
+font[type="Fashion Squad"] {
+	color: #EF98AA;
+}
+
+font[type="small"] {
+	font-size: 9pt;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.visible {
+	opacity: 1;
+	margin-bottom: 20px;
+    transition: opacity 1.8s, margin-top 1s;
+}
+
+.invisible {
+	overflow: hidden;
+	margin-top: -9999px;
+    opacity: 0;
+    margin-bottom: 70px;
+    transition: opacity 1.8s, margin-top 10s 1.8s, margin-bottom 0s 2s;
+}
