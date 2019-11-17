@@ -50,6 +50,30 @@ async function extract_forum_data()
 			.then(body => generate_html(body, name))
 }
 
+// GitHub
+let github_roles = {
+	"Module Team": "mt",
+	"Funcorp": "fc",
+	"Fashion Squad": "fs"
+}
+
+function extract_github_nicknames(body, name)
+{
+	let list = body.match(`${name} = {[^}]+}`);
+	return list[0].match(/\w+#\d+/g);
+}
+
+const github_url = cors_url + "https://github.com/a801-luadev/bolodefchoco/raw/master/module.lua";
+async function extract_github_data()
+{
+	await fetch(github_url)
+		.then(body => body.text())
+		.then(body => {
+			for (name in github_roles)
+				generate_html(extract_github_nicknames(body, github_roles[name]), name);
+		})
+}
+
 // Build
 const html_init = `
 	<div class=\"list\" class=\"visible\">
