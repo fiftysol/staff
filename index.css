@@ -132,3 +132,18 @@ a {
 .invisible-hide {
 	display: none;
 }
+
+span[type="footer"] {
+	color: #AAAAAA;
+	font-family: Verdana;
+	font-size: 0.8rem;
+}
+
+span[type="credit"]:after {
+	color: #1C96CF;
+	content: "@Lautenschlager";
+}
+
+span[type="credit"]:hover:after {
+	content: 'Bolodefchoco#0000';
+}
