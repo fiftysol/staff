@@ -7,8 +7,9 @@ if (!String.format) {
 		});
 	};
 }
+const cors_url = "https://cors-anywhere.herokuapp.com/";
 
-let toggleVisible = function(name)
+function toggleVisible(name)
 {
 	let classList = document.getElementById(name).classList
 	if (classList.contains("invisible"))
@@ -21,6 +22,32 @@ let toggleVisible = function(name)
 		classList.add("invisible");
 		classList.remove("visible");
 	}
+}
+
+// Forum
+let forum_roles = {
+	"Administrators" : 128,
+	"Moderators"     : 1,
+	"Sentinels"      : 4,
+	"Mapcrew"        : 16
+}
+
+function extract_forum_nicknames(body)
+{
+	let match = body.match(/(\S+)(?:<span class="nav-header-hashtag">)(#\d+)/g);
+	for (str in match)
+		match[str] = match[str].replace(/<.+>/, '');
+	return match.sort();
+}
+
+const forum_url = cors_url + "https://atelier801.com/staff-ajax?role=";
+async function extract_forum_data()
+{
+	for (name in forum_roles)
+		await fetch(forum_url + forum_roles[name])
+			.then(body => body.text())
+			.then(body => extract_forum_nicknames(body))
+			.then(body => generate_html(body, name))
 }
 
 // Build
@@ -40,3 +67,5 @@ const html_end = `
 			</table>
 		</div>
 	</div>`;
+
+function generate_html(body, name) { }
