@@ -5,20 +5,26 @@ body {
 }
 
 .banner {
-	background-color: #000000;
+	background-color: #000;
 }
 
-.aligned {
-	padding-left: 20%;
+nav div {
+	text-align: center;
+}
+
 .logo {
 	max-width: 80%;
 	height: auto;
 }
+
+.menu-child {
+	display: inline-flex;
 }
 
 .menu {
+	margin-top: -5px;
 	background-color: #101010;
-	display: flex;
+	text-align: center;
 }
 
 .menu .button {
