@@ -84,7 +84,7 @@ let forum_roles = {
 
 function extract_forum_nicknames(body)
 {
-	return [...body.matchAll(/(?<nickname>\w+)<span class="font-s couleur-hashtag-pseudo"> #(?<discriminator>\d+)<\/span>.+?"\/img\/pays\/(?<community>..)\.png"/g)].sort();
+	return [...body.matchAll(/(\w+)<span class="font-s couleur-hashtag-pseudo"> #(\d+)<\/span>.+?"\/img\/pays\/(..)\.png"/g)].sort();
 }
 
 const forum_url = cors_url + "https://atelier801.com/staff-ajax?role=";
@@ -108,7 +108,8 @@ let github_roles = {
 function extract_github_nicknames(body, name)
 {
 	let list = body.match(`${name} = {[^}]+}`);
-	return [...list[0].matchAll(/(?<nickname>\w+)#(?<discriminator>\d+)"\] = \"(?<community>..)\"/g)];
+	// Nickname, Discriminator, Community
+	return [...list[0].matchAll(/(\w+)#(\d+)"\] = \"(..)\"/g)];
 }
 
 const github_url = cors_url + "https://github.com/a801-luadev/bolodefchoco/raw/master/module.lua";
@@ -152,9 +153,9 @@ function generate_html(staff_list, name, element = null, type = "nickname")
 		html += String.format(html_cell,
 			(++color_index % 2 == 0 ? "even" : "odd"),
 			name,
-			staff_list[index].groups.nickname,
-			staff_list[index].groups.discriminator,
-			get_flag(staff_list[index].groups.community)
+			staff_list[index][1],
+			staff_list[index][2],
+			get_flag(staff_list[index][3])
 		);
 	}
 
