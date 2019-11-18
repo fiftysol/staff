@@ -145,11 +145,42 @@ span[type="footer"] {
 
 span[type="credit"]:after {
 	color: #1C96CF;
-	content: "@Lautenschlager";
+	content: '';
+	animation: faded-content-change-out 1s 1;
+	animation-fill-mode: forwards;
 }
 
 span[type="credit"]:hover:after {
-	content: 'Bolodefchoco#0000';
+	animation: faded-content-change-in 1s 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes faded-content-change-out {
+	0% {
+		opacity: 1;
+		content: 'Bolodefchoco#0000';
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		content: '@Lautenschlager';
+	}
+}
+
+@keyframes faded-content-change-in {
+	0% {
+		opacity: 1;
+		content: '@Lautenschlager';
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		content: 'Bolodefchoco#0000';
+	}
 }
 
 .clickable {
