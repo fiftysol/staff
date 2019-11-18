@@ -93,7 +93,7 @@ function extract_forum_data()
 	for (let name in forum_roles){
 		fetch(forum_url + forum_roles[name])
 			.then(body => body.text())
-			.then(body => extract_forum_nicknames(body))
+			.then(body => data[name] = extract_forum_nicknames(body))
 			.then(body => generate_html(body, name))
 	}
 }
