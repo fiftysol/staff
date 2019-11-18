@@ -26,6 +26,18 @@ function toggle_visibility(name)
 	}
 }
 
+let flags_to_replace = {
+	"ar": "sa",
+	"en": "gb",
+	"he": "il"
+}
+
+function get_flag(code)
+{
+	code = code.toLowerCase();
+	return flags_to_replace[code] || code;
+}
+
 // Forum
 let forum_roles = {
 	"Administrators" : 128,
@@ -36,7 +48,8 @@ let forum_roles = {
 
 function extract_forum_nicknames(body)
 {
-	return [...body.matchAll(/(\S+)<span class="nav-header-hashtag">#(\d+)/g)].sort();
+	// Community, Nickname, Discriminator
+	return [...body.matchAll(/(?<nickname>\w+)<span class="font-s couleur-hashtag-pseudo"> #(?<discriminator>\d+)<\/span>.+?"\/img\/pays\/(?<community>..)\.png"/g)].sort();
 }
 
 const forum_url = cors_url + "https://atelier801.com/staff-ajax?role=";
@@ -60,7 +73,8 @@ let github_roles = {
 function extract_github_nicknames(body, name)
 {
 	let list = body.match(`${name} = {[^}]+}`);
-	return [...list[0].matchAll(/(\w+)#(\d+)/g)];
+	// Nickname, Discriminator, Community
+	return [...list[0].matchAll(/(?<nickname>\w+)#(?<discriminator>\d+)"\] = \"(?<community>..)\"/g)];
 }
 
 const github_url = cors_url + "https://github.com/a801-luadev/bolodefchoco/raw/master/module.lua";
@@ -82,10 +96,12 @@ const html_init = `
 			<table>
 				<tr class=\"head\">
 					<th>Nickname</th>
+					<th>Community</th>
 				</tr>`;
 const html_cell = `
 				<tr class=\"{0}-background\">
-					<td><a href=\"https://atelier801.com/profile?pr={2}%23{3}\" target="_blank"><font type=\"{1}\">{2}</font><font type=\"small\">#{3}</font></a></td>
+					<td><a href=\"https://atelier801.com/profile?pr={2}%23{3}\" target=\"_blank\"><font type=\"{1}\">{2}</font><font type=\"small\">#{3}</font></a></td>
+					<td><img src=\"https://atelier801.com/img/pays/{4}.png" alt="{4}" /></td>
 				</tr>`;
 const html_end = `
 			</table>
@@ -102,8 +118,9 @@ function generate_html(staff_list, name)
 		html += String.format(html_cell,
 			(++color_index % 2 == 0 ? "even" : "odd"),
 			name,
-			staff_list[index][1],
-			staff_list[index][2]
+			staff_list[index].groups.nickname,
+			staff_list[index].groups.discriminator,
+			get_flag(staff_list[index].groups.community)
 		);
 	}
 
@@ -128,7 +145,7 @@ function place_lists()
 function init()
 {
 	place_lists();
- 	if (!document.location.search.match(/[?&]nonstaff\b/))
+ 	if (!document.location.search.match(/[?&]non?staff\b/))
 		extract_forum_data();
  	if (!document.location.search.match(/[?&]staff\b/))
 		extract_github_data();
