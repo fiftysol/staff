@@ -129,7 +129,7 @@ function extract_github_data()
 const html_init = `
 	<div id=\"{0}\" class=\"list\">
 		<h3 onclick=\"toggle_visibility('{0}');\"><font type=\"{0}\">{0}</font></h3>
-		<div>
+		<div class="staff-list-properties invisible-hide invisible-animate">
 			<table>
 				<tr class=\"head\">
 					<th class=\"clickable\" onclick=\"sort_data('nickname','{0}')\">Nickname</th>
