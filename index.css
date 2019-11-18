@@ -147,3 +147,7 @@ span[type="credit"]:after {
 span[type="credit"]:hover:after {
 	content: 'Bolodefchoco#0000';
 }
+
+.clickable {
+	cursor: pointer;
+}

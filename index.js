@@ -1,3 +1,6 @@
+// Data
+let data = { };
+
 // Utils
 if (!String.format) {
 	String.format = function(format) {
@@ -11,7 +14,7 @@ const cors_url = "https://cors-anywhere.herokuapp.com/";
 
 function toggle_visibility(name)
 {
-	let classList = document.getElementById(name).classList
+	let classList = document.getElementById(name).children[1].classList
 	if (classList.contains("invisible-hide"))
 	{
 		classList.remove("invisible-animate");
@@ -38,6 +41,39 @@ function get_flag(code)
 	return flags_to_replace[code] || code;
 }
 
+function replace_element(element, html)
+{
+	element = document.getElementById(element);
+	element.insertAdjacentHTML("afterend", html);
+	element.remove();
+}
+
+let sort_state = { };
+
+function sort_data(type, name)
+{
+	if (!sort_state[name][type])
+	{
+		if (type == "community")
+		{
+			for (let index in data[name])
+			[
+				data[name][index][0],
+				data[name][index][1],
+				data[name][index][2],
+				data[name][index][3]
+			] = [
+				data[name][index][3],
+				data[name][index][1],
+				data[name][index][2],
+				null
+			];
+		}
+		generate_html(data[name].sort(), name, name, type);
+	}
+	replace_element(name, sort_state[name][type]);
+}
+
 // Forum
 let forum_roles = {
 	"Administrators" : 128,
@@ -48,7 +84,6 @@ let forum_roles = {
 
 function extract_forum_nicknames(body)
 {
-	// Community, Nickname, Discriminator
 	return [...body.matchAll(/(?<nickname>\w+)<span class="font-s couleur-hashtag-pseudo"> #(?<discriminator>\d+)<\/span>.+?"\/img\/pays\/(?<community>..)\.png"/g)].sort();
 }
 
@@ -73,7 +108,6 @@ let github_roles = {
 function extract_github_nicknames(body, name)
 {
 	let list = body.match(`${name} = {[^}]+}`);
-	// Nickname, Discriminator, Community
 	return [...list[0].matchAll(/(?<nickname>\w+)#(?<discriminator>\d+)"\] = \"(?<community>..)\"/g)];
 }
 
@@ -84,19 +118,19 @@ function extract_github_data()
 		.then(body => body.text())
 		.then(body => {
 			for (let name in github_roles)
-				generate_html(extract_github_nicknames(body, github_roles[name]), name);
+				generate_html(data[name] = extract_github_nicknames(body, github_roles[name]), name);
 		})
 }
 
 // Build
 const html_init = `
-	<div class=\"list\" class=\"visible\">
-		<h3 onclick="toggle_visibility('{0}');"><font type=\"{0}\">{0}</font></h3>
-		<div id=\"{0}\">
+	<div id=\"{0}\" class=\"list\">
+		<h3 onclick=\"toggle_visibility('{0}');\"><font type=\"{0}\">{0}</font></h3>
+		<div>
 			<table>
 				<tr class=\"head\">
-					<th>Nickname</th>
-					<th>Community</th>
+					<th class=\"clickable\" onclick=\"sort_data('nickname','{0}')\">Nickname</th>
+					<th class=\"clickable\" onclick=\"sort_data('community','{0}')\">Community</th>
 				</tr>`;
 const html_cell = `
 				<tr class=\"{0}-background\">
@@ -108,7 +142,7 @@ const html_end = `
 		</div>
 	</div>`;
 
-function generate_html(staff_list, name)
+function generate_html(staff_list, name, element = null, type = "nickname")
 {
 	let html = String.format(html_init, name);
 	let color_index = 0;
@@ -127,9 +161,11 @@ function generate_html(staff_list, name)
 	// Effect of "loading" in the site, instead of loading everything at once.
 	html += html_end;
 
-	let tmp = document.getElementById("tmp-" + name);
-	tmp.insertAdjacentHTML("afterend", html);
-	tmp.remove();
+	if (!sort_state[name])
+		sort_state[name] = { };
+	sort_state[name][type] = html;
+
+	replace_element(element || ("tmp-" + name), html);
 }
 
 // Init
