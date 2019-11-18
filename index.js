@@ -5,7 +5,7 @@ let data = { };
 if (!String.format) {
 	String.format = function(format) {
 		var args = Array.prototype.slice.call(arguments, 1);
-		return format.replace(/{(\d+)}/g, function(match, number) { 
+		return format.replace(/{(\d+)}/g, function(match, number) {
 			return typeof args[number] != "undefined" ? args[number] : match;
 		});
 	};
@@ -17,15 +17,18 @@ function toggle_visibility(name)
 	let classList = document.getElementById(name).children[1].classList
 	if (classList.contains("invisible-hide"))
 	{
-		classList.remove("invisible-animate");
 		classList.remove("invisible-hide");
+		// setTimeout is there so it waits until .invisible-hide is removed
+		setTimeout(function() {
+			classList.remove("invisible-animate");
+		});
 	}
 	else
 	{
 		classList.add("invisible-animate");
 		setTimeout(function() {
 			classList.add("invisible-hide");
-		}, 1000);
+		}, 500);
 	}
 }
 
