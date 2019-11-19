@@ -148,6 +148,9 @@ a {
 }
 
 .staff-list-properties {
+	-webkit-transition: opacity .5s;
+	-moz-transition: opacity .5s;
+	-o-transition: opacity .5s;
 	transition: opacity .5s;
 	opacity: 1;
 }
@@ -169,12 +172,22 @@ span[type="footer"] {
 span[type="credit"]:after {
 	color: #1C96CF;
 	content: '';
+	-webkit-animation: faded-content-change-out 1s 1;
+	-moz-animation: faded-content-change-out 1s 1;
 	animation: faded-content-change-out 1s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
 	animation-fill-mode: forwards;
 }
 
 span[type="credit"]:hover:after {
+	-webkit-animation: faded-content-change-in 1s 1;
+	-moz-animation: faded-content-change-in 1s 1;
 	animation: faded-content-change-in 1s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
 	animation-fill-mode: forwards;
 }
 
