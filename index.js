@@ -28,7 +28,7 @@ function toggle_visibility(name)
 		classList.add("invisible-animate");
 		setTimeout(function() {
 			classList.add("invisible-hide");
-		}, 500);
+		}, 250);
 	}
 }
 
@@ -182,9 +182,9 @@ function place_lists()
 	document.getElementById("lists").innerHTML += html;
 }
 
-function init()
+async function init()
 {
-	place_lists();
+	await place_lists();
  	if (!document.location.search.match(/[?&]non?staff\b/))
 		extract_forum_data();
  	if (!document.location.search.match(/[?&]staff\b/))
