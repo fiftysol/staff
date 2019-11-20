@@ -104,8 +104,8 @@ function extract_forum_data()
 // GitHub
 let github_roles = {
 	"Module Team":   "mt",
-	"Funcorp":       "fc",
-	"Fashion Squad": "fs"
+	"Fashion Squad": "fs",
+	"Funcorp":       "fc"
 }
 
 function extract_github_nicknames(body, name)
