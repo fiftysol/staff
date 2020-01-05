@@ -101,28 +101,41 @@ function extract_forum_data()
 	}
 }
 
-// GitHub
-let github_roles = {
+// Database / #bolodefchoco
+let database_roles = {
 	"Module Team":   "mt",
 	"Fashion Squad": "fs",
 	"Funcorp":       "fc"
 }
 
-function extract_github_nicknames(body, name)
+function extract_database_nicknames(body)
 {
-	let list = body.match(`${name} = {[^}]+}`);
+	let data = [ ];
+
+	let names = Object.keys(body).sort();
+
 	// Nickname, Discriminator, Community
-	return [...list[0].matchAll(/(\w+)#(\d+)"\] = \"(..)\"/g)];
+	for (let name = 0; name < names.length; name++)
+	{
+		data[name] = [ ];
+		data[name][0] = null;
+		data[name][1] = names[name].slice(0, -5);
+		data[name][2] = names[name].slice(-4);
+		data[name][3] = body[names[name]];
+	}
+
+	return data;
 }
 
-const github_url = cors_url + "https://github.com/a801-luadev/bolodefchoco/raw/master/module.lua";
-function extract_github_data()
+const database_url = "http://discbotdb.000webhostapp.com/get?e=json&f=teamList";
+function extract_database_data()
 {
-	fetch(github_url)
+	fetch(database_url)
 		.then(body => body.text())
+		.then(body => JSON.parse(body))
 		.then(body => {
-			for (let name in github_roles)
-				generate_html(data[name] = extract_github_nicknames(body, github_roles[name]), name);
+			for (let name in database_roles)
+				generate_html(data[name] = extract_database_nicknames(body[database_roles[name]]), name);
 		})
 }
 
@@ -177,7 +190,7 @@ const html_tmp_div = "<div id=\"tmp-{0}\"></div>"
 function place_lists()
 {
 	let html = '';
-	for (let team of Object.keys(forum_roles).concat(Object.keys(github_roles)))
+	for (let team of Object.keys(forum_roles).concat(Object.keys(database_roles)))
 		html += String.format(html_tmp_div, team);
 	document.getElementById("lists").innerHTML += html;
 }
@@ -188,5 +201,5 @@ async function init()
  	if (!document.location.search.match(/[?&]non?staff\b/))
 		extract_forum_data();
  	if (!document.location.search.match(/[?&]staff\b/))
-		extract_github_data();
+		extract_database_data();
 }
