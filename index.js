@@ -10,7 +10,7 @@ if (!String.format) {
 		});
 	};
 }
-const cors_url = "https://cors-anywhere.herokuapp.com/";
+const cors_url = "https://bolo-cors.herokuapp.com/";
 
 function toggle_visibility(name)
 {
