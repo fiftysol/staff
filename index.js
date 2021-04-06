@@ -127,7 +127,7 @@ function extract_database_nicknames(body)
 	return data;
 }
 
-const database_url = "https://discorddb.000webhostapp.com/get?e=json&f=teamList";
+const database_url = cors_url + "https://discorddb.000webhostapp.com/get?e=json&f=teamList";
 function extract_database_data()
 {
 	fetch(database_url)
