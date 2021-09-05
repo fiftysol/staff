@@ -10,7 +10,7 @@ if (!String.format) {
 		});
 	};
 }
-const cors_url = "https://cors-anywhere.herokuapp.com/";
+const cors_url = "https://bolo-cors.herokuapp.com/";
 
 function toggle_visibility(name)
 {
@@ -87,7 +87,7 @@ let forum_roles = {
 
 function extract_forum_nicknames(body)
 {
-	return [...body.matchAll(/(\w+)<span class="font-s couleur-hashtag-pseudo"> #(\d+)<\/span>.+?"\/img\/pays\/(..)\.png"/g)].sort();
+	return [...body.matchAll(/(\S+)<span class="font-s couleur-hashtag-pseudo"> #(\d+)<\/span>.+?"\/img\/pays\/(..)\.png"/g)].sort();
 }
 
 const forum_url = cors_url + "https://atelier801.com/staff-ajax?role=";
@@ -127,7 +127,7 @@ function extract_database_nicknames(body)
 	return data;
 }
 
-const database_url = "https://discorddb.000webhostapp.com/get?e=json&f=teamList";
+const database_url = cors_url + "https://discorddb.000webhostapp.com/get?e=json&f=teamList";
 function extract_database_data()
 {
 	fetch(database_url)
